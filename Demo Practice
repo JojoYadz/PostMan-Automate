@@ -1,0 +1,880 @@
+{
+	"info": {
+		"_postman_id": "0da53635-c411-4cdb-b9e6-dc2bbcdacc5b",
+		"name": "QuickReceipt",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22708646"
+	},
+	"item": [
+		{
+			"name": "User SignUp",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let num = Math.random().toString().substr(2,7);\r",
+							"\r",
+							"const phoneArray = [\r",
+							"    \"+234807\",\r",
+							"    \"+234909\",\r",
+							"    \"+234803\",\r",
+							"    \"+234705\",\r",
+							"    \"+234704\",\r",
+							"    \"+234802\"\r",
+							"];\r",
+							"let selection = Math.floor(Math.random() * 6);\r",
+							"let phone = phoneArray[selection] + num\r",
+							"pm.environment.set(\"reg_phone\", phone);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Add phone\", function (){\r",
+							"var phone = JSON.parse(pm.request.body.raw).phone;\r",
+							"pm.environment.set(\"reg_phone\", phone)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"message\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.eql(\"Registration successful\");\r",
+							"    pm.expect(jsonData.useOtp).to.eql(true)\r",
+							"    pm.expect(jsonData.data).to.not.eql(null)\r",
+							"});\r",
+							"\r",
+							"pm.test (\"has userId\", function (){\r",
+							"   const {data} = pm.response.json()\r",
+							"   pm.environment.set('userId',data.userId);\r",
+							"   return 'userId'in data;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "app_secret",
+						"value": "nUZI07tRIql6ImUTJZBZ1fotiSBcz0SN",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"phone\": \"{{reg_phone}}\",\r\n    \"password\": \"PastelTest2022@\",\r\n    \"businessName\": \"PastelSwiftMoney\",\r\n    \"accountType\": \"individual\",\r\n    \"fcmToken\": \"SWE{{$randomAlphaNumeric}}\",\r\n    \"referredBy\": \"PSW767M{{$randomAlphaNumeric}}\",\r\n    \"deviceHash\": \"{{$randomCatchPhrase}}\",\r\n    \"email\": \"jyadeka2@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/auth/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "User SignUp",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "app_secret",
+								"value": "nUZI07tRIql6ImUTJZBZ1fotiSBcz0SN",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "phone",
+									"value": "080{{$randomBankAccount}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "PastelTest2022@",
+									"type": "text"
+								},
+								{
+									"key": "businessName",
+									"value": "{{$randomDomainName}}",
+									"type": "text"
+								},
+								{
+									"key": "accountType",
+									"value": "individual",
+									"type": "text"
+								},
+								{
+									"key": "fcmToken",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "referredBy",
+									"value": "PSQS{{$randomAlphaNumeric}}",
+									"type": "text"
+								},
+								{
+									"key": "deviceHash",
+									"value": "{{$randomCatchPhrase}}",
+									"type": "text"
+								},
+								{
+									"key": "os",
+									"value": "iOS",
+									"type": "text"
+								},
+								{
+									"key": "app",
+									"value": "sabi",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "{{$randomEmail}}",
+									"type": "text"
+								},
+								{
+									"key": "fullName",
+									"value": "{{$randomFullName}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://prodapi.sabipay.com/api/v1/user/auth/register",
+							"protocol": "https",
+							"host": [
+								"prodapi",
+								"sabipay",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 09 Aug 2022 10:56:41 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "118"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Server",
+							"value": "nginx/1.20.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"76-vkRYOUwcL+ucJEstZvZ37d9ij1U\""
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Registration successful\",\n    \"useOtp\": true,\n    \"data\": {\n        \"userId\": \"62f23d683f7f6b5e74e05e61\",\n        \"phoneVerified\": false\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Resend Verification OTP- SMS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test (\"returns message\", function (){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.not.eql(null);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer{{reg_phone}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/auth/resend-phone-verification/{{userId}}?via=sms",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"auth",
+						"resend-phone-verification",
+						"{{userId}}"
+					],
+					"query": [
+						{
+							"key": "via",
+							"value": "sms"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Resend Verification OTP- Email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test (\"returns message\", function (){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.not.eql(null);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/auth/resend-phone-verification/{{userId}}?via=email",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"auth",
+						"resend-phone-verification",
+						"{{userId}}"
+					],
+					"query": [
+						{
+							"key": "via",
+							"value": "email"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Phone Verification and Activation",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"return token\", function () {\r",
+							"    const {token} = pm.response.json();\r",
+							"    pm.environment.set('token', token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "app_secret",
+						"value": "nUZI07tRIql6ImUTJZBZ1fotiSBcz0SN",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "otp",
+							"value": "111111",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/auth/phone-verification/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"auth",
+						"phone-verification",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "User SignUp",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "app_secret",
+								"value": "nUZI07tRIql6ImUTJZBZ1fotiSBcz0SN",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "phone",
+									"value": "080{{$randomBankAccount}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "PastelTest2022@",
+									"type": "text"
+								},
+								{
+									"key": "businessName",
+									"value": "{{$randomDomainName}}",
+									"type": "text"
+								},
+								{
+									"key": "accountType",
+									"value": "individual",
+									"type": "text"
+								},
+								{
+									"key": "fcmToken",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "referredBy",
+									"value": "PSQS{{$randomAlphaNumeric}}",
+									"type": "text"
+								},
+								{
+									"key": "deviceHash",
+									"value": "{{$randomCatchPhrase}}",
+									"type": "text"
+								},
+								{
+									"key": "os",
+									"value": "iOS",
+									"type": "text"
+								},
+								{
+									"key": "app",
+									"value": "sabi",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "{{$randomEmail}}",
+									"type": "text"
+								},
+								{
+									"key": "fullName",
+									"value": "{{$randomFullName}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://prodapi.sabipay.com/api/v1/user/auth/register",
+							"protocol": "https",
+							"host": [
+								"prodapi",
+								"sabipay",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 09 Aug 2022 10:56:41 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "118"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Server",
+							"value": "nginx/1.20.0"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"76-vkRYOUwcL+ucJEstZvZ37d9ij1U\""
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Registration successful\",\n    \"useOtp\": true,\n    \"data\": {\n        \"userId\": \"62f23d683f7f6b5e74e05e61\",\n        \"phoneVerified\": false\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "LogIn User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"message\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.eql(\"Log in successful\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test (\"returns data\", function (){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data).to.not.eql(null);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"phone\" : \"{{reg_phone}}\",\r\n    \"password\" : \"PastelTest2022@\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Joanna",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"message\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.eql(\"Log in successful\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test (\"returns data\", function (){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data).to.not.eql(null);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"phone\" : \"{{reg_phone}}\",\r\n    \"password\" : \"PastelTest2022@\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Content-Type is APPLICATION/JSON\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\",\"application/json; charset=utf-8\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"message\", function(){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.not.eql(null);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"phone\": \"{{reg_phone}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/auth/reset-password",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"auth",
+						"reset-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set New Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Content-Type is APPLICATION/JSON\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\",\"application/json; charset=utf-8\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"message\", function(){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.not.eql(null);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"{{userId}}\",\r\n    \"password\": \"PastelTest2022!!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/password/set-new",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"password",
+						"set-new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Add member",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmYzNjlhMmM4NWE0ZTM1M2NkMDgyZGEiLCJwaG9uZSI6IisyMzQ3MDQ4MDYwMTg1Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjYwNTcwMzI5LCJleHAiOjE2NjMxNjIzMjl9.wQziAapnWTaEIVT6NPmzthq1uZlHfOv246hiZHgcvGY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"phone\": \"+2348073172616\",\r\n    \"alias\": \"Tesr2\",\r\n    \"cadence\": \"monthly\",\r\n    \"defaultContributionAmount\": 15000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/ajo/group/62f36abac85a4e353cd08347/join",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"ajo",
+						"group",
+						"62f36abac85a4e353cd08347",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save money",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmYzNjlhMmM4NWE0ZTM1M2NkMDgyZGEiLCJwaG9uZSI6IisyMzQ3MDQ4MDYwMTg1Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjYwNTczMDI4LCJleHAiOjE2NjMxNjUwMjh9.QwSuywzaB-ualoWMLVCtvwGvYtQq9BSnrE7Yq0SdL70",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\" : 200000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/savings",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"savings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Approve savings",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmYzNjlhMmM4NWE0ZTM1M2NkMDgyZGEiLCJwaG9uZSI6IisyMzQ3MDQ4MDYwMTg1Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjYwNTc0NzQyLCJleHAiOjE2NjMxNjY3NDJ9.RHteCVJo6O22Bpdz2ChpVybcgd6p9QikD4DHMRZ8t-4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"status\": \"confirmed\",\r\n    \"source\": \"Wema Bank\",\r\n    \"transactionId\": \"2fa55736efd041dcb6fdfdb\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/ajo-dashboard/savings/transaction/:TRANSACTION_ID/approval",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"ajo-dashboard",
+						"savings",
+						"transaction",
+						":TRANSACTION_ID",
+						"approval"
+					],
+					"variable": [
+						{
+							"key": "TRANSACTION_ID",
+							"value": "62f36a26c85a4e353cd0830e"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
